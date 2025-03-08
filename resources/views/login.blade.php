@@ -64,7 +64,7 @@
                 <label for="remember-me" class="ms-2 text-md font-medium text-black-900 dark:text-black-300">Remember Me</label>
             </span>
             <button>Login</button>
-            <p>Create a new Account ? <a href="{{ url('/signup') }}">Register</a></p>
+            <p>Create a new Account ? <a href="{{ url('/register/2') }}">Register</a></p>
         </form>
     </div>
 </body>

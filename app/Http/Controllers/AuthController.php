@@ -25,7 +25,7 @@ class AuthController extends Controller
             $user_id = User::where('username', '=', $credintials['username'])->get('id')->first()->id;
             session(['user_id'=> $user_id]);
 
-            if (session()->get('goto') === null) {
+            if (session()->get('goto') !== 1) {
                 return redirect()->route('home');
             } else {
                 $goto = session()->get('goto');
