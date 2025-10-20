@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\EmailVerificationService;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
@@ -16,22 +17,16 @@ class EmailVerificationController extends Controller
      * @param \Illuminate\Foundation\Auth\EmailVerificationRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function handleEmailVerification(Request $request)
+    public function handleEmailVerification(Request $request, EmailVerificationService $service)
     {
 
-        $user = User::where('id', '=', $request->route('id'))->first();
-        
-        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
-            abort(403, "Invalid verification link.");
+        $response = $service->handleVerification($request->route()->parameters());
+        if ($response["status"] == 403) {
+            abort($response["status"], $response["message"]);
         }
-        
-        if ($user->hasVerifiedEmail()) {
-            return redirect()->intended('/')->with('status', 'Email already verified.');
+        if ($response["status"] == 400) {
+            return redirect()->intended($response["path"])->with("status", $response["message"]);
         }
-        
-        $user->markEmailAsVerified();
-        event(new Verified($user));
-
         return redirect()->intended('/')->with('status', 'Email verified successfully.');
     }
     /**

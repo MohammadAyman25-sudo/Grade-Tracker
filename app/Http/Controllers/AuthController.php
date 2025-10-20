@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Services\AuthService;
 
 class AuthController extends Controller
 {
@@ -14,17 +13,10 @@ class AuthController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\RedirectResponse
      */
-    public function login(Request $request)
+    public function login(Request $request, AuthService $authService)
     {
-        $credintials = $request->validate([
-            'username' => "required",
-            "password" => "required"
-        ]);
-        if (Auth::attempt($credintials, $request->boolean('remember_me'))) {
-            session()->regenerate();
-            $user_id = User::where('username', '=', $credintials['username'])->get('id')->first()->id;
-            session(['user_id'=> $user_id]);
-
+        $response = $authService->login($request->all(), $request->boolean("remember_me"));
+        if ($response["status"] == 200) {
             if (session()->get('goto') !== 1) {
                 return redirect()->route('home');
             } else {
@@ -33,23 +25,16 @@ class AuthController extends Controller
                 return redirect($goto);
             }
         }
-        return back()->withErrors([
-            'username' => "Your username or your password is invalid"
-        ])->onlyInput('username');
+        return back($status = $response["status"])->withErrors($response["errors"])->onlyInput('username');
     }
 
     /**
      * This method is responsible for logging the user out and clearing the session storage
      * @return mixed|\Illuminate\Http\RedirectResponse
      */
-    public function logout()
+    public function logout(AuthService $authService)
     {
-        Auth::logout();
-
-        session()->flush();
-        session()->invalidate();
-        session()->regenerateToken();
-
+        $authService->logout();
         return redirect()->route('home');
     }
 }
