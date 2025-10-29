@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\Verified;
 
 class EmailVerificationService {
     public function handleVerification(array $params) {
-        $user = User::where('id', '=', $params["token"])->first();
+        $user = User::where('id', '=', $params["id"])->first();
 
         if (!hash_equals((string) $params['hash'], sha1($user->getEmailForVerification()))) {
             return [

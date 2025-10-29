@@ -197,8 +197,8 @@
                               <span class="text-transparent bg-clip-text bg-gradient-to-r to-orange-600 from-yellow-400">Your Collegue Who'll Send You Your Grades As Soon As They Are Published</span>
                             </h1>
                         </div>
-                        <p class="mb-3 text-lg dark:text-gray-600 text-center">No need to go to your college or visit thier site and waste your time</p>
-                        <p class="mb-3 text-lg dark:text-gray-600 text-center">just give use your college credintials and let us handle it</p>
+                        <p class="mb-3 text-lg dark:text-gray-600 text-center">No need to go to your college or visit their site and waste your time</p>
+                        <p class="mb-3 text-lg dark:text-gray-600 text-center">just give use your college credentials and let us handle it</p>
                         @auth
                             <a 
                                 href="{{ route('college-credentials') }}"

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Registered;
-use RegisterationService;
+use App\Http\Services\RegisterationService;
 
 class RegisterationController extends Controller
 {
@@ -17,7 +15,7 @@ class RegisterationController extends Controller
     public function register(Request $request, RegisterationService $registerService) {
         $registered = $registerService->register($request->all());
         if ($registered["status"] == 400) {
-            return back($status=400)->withErrors($registered["errors"]);
+            return back()->withErrors($registered["errors"]);
         }
         return redirect()->route('verification.notice');
     }

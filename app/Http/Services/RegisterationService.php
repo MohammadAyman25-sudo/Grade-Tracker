@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Services;
+
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Validator;
